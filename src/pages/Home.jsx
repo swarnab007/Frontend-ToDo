@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
-import { server } from "../main";
+import { context, server } from "../main";
 import toast from "react-hot-toast";
 import ToDoItem from "../components/ToDoItems";
+import { Navigate } from "react-router-dom";
 
 const Home = () => {
   const [title, setTitle] = React.useState("");
@@ -11,6 +12,8 @@ const Home = () => {
   const [loading, setLoading] = React.useState(false);
   const [tasks, setTasks] = React.useState([]);
   const [refresh, setRefresh] = useState(false);
+
+  const { isAuthenticated } = useContext(context);
 
   const handleUpdate = async (id) => {
     try {
@@ -22,7 +25,7 @@ const Home = () => {
       );
       toast.success(data.message);
       setLoading(false);
-      setRefresh(prev => !prev);
+      setRefresh((prev) => !prev);
     } catch (e) {
       toast.error(e.data.response.message);
       setLoading(false);
@@ -32,13 +35,12 @@ const Home = () => {
   const handleDelete = async (id) => {
     try {
       setLoading(true);
-      const { data } = await axios.delete(
-        `${server}/tasks/${id}`,
-        { withCredentials: true }
-      );
+      const { data } = await axios.delete(`${server}/tasks/${id}`, {
+        withCredentials: true,
+      });
       toast.success(data.message);
       setLoading(false);
-      setRefresh(prev => !prev);
+      setRefresh((prev) => !prev);
     } catch (e) {
       toast.error(e.data.response.message);
       setLoading(false);
@@ -66,7 +68,7 @@ const Home = () => {
       setTitle("");
       setDescription("");
       setLoading(false);
-      setRefresh(prev => !prev);
+      setRefresh((prev) => !prev);
       toast.success(data.message);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -84,6 +86,8 @@ const Home = () => {
         toast.error(error.response.data.message);
       });
   }, [refresh]);
+
+  if (!isAuthenticated) <Navigate to="/login" />;
 
   return (
     <div>
