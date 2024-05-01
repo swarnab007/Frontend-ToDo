@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 
-export const server = "https://backend-todo-webapp.onrender.com/";
+export const server = "https://backend-todo-webapp.onrender.com/api/v1";
 
 export const context = createContext({ isAuthenticated: false });
 
