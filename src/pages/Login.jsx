@@ -13,8 +13,10 @@ const Login = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
+    
     setLoader(true);
-    console.log(username, password);
+    console.log("Logging in...",username, password);
+    //console.log(username, password);
     try {
       const { data } = await axios.post(
         `${server}/users/login`,
